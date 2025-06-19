@@ -1,2 +1,2 @@
-# project-ember
-A WIP indie 2D arpg
+# Project Ember 🔥
+A dark-fantasy 2D action RPG prototype inspired by Diablo, built in Unity.
