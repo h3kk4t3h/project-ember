@@ -1,6 +1,6 @@
 ## Capa
 
-**Título:** ARPG 2D em Unity: Do Conceito à Implementação
+**Título:** ARPG isometrico em Unity: Do Conceito à Implementação
 
 **Autores:** Bianca Ribeiro, Lucas Quiroz, Ricardo Roda, Rui Moreira
 
@@ -54,7 +54,7 @@ As engines mais comuns para 2D incluem Unity e Godot. C# na Unity oferece ampla 
 
 ### Objetivo Geral
 
-Desenvolver um protótipo de ARPG 2D com funcionalidades-chave de progressão, inventário, árvore de habilidades e combate.
+Desenvolver um protótipo de ARPG isometrico com funcionalidades-chave de progressão, inventário, árvore de habilidades e combate.
 
 ### Objetivos Específicos
 
@@ -77,7 +77,7 @@ Utilização de Scrum com sprints de duas semanas, reuniões diárias de stand-u
 - **Linguagem:** C# (.NET Standard)
 - **IDE:** Rider e Visual Studio
 - **Versionamento:** Git e GitHub
-- **Comunicação:** Discord, Notion para gestão de tarefas
+- **Comunicação:** Discord, Notion e GitHub Projects para gestão de tarefas
 
 ---
 
