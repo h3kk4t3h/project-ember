@@ -36,7 +36,7 @@ Este relatório descreve o desenvolvimento de um jogo Action RPG (ARPG) 2D usand
 
 ## 1. Introdução
 
-Os jogos ARPG 2D têm conquistado popularidade pela combinação de ação em tempo real e progressão de personagem. Este projeto pretende explorar o pipeline completo de desenvolvimento, desde a conceção do design até à implementação técnica em C# e Unity.
+Os jogos ARPG têm conquistado popularidade pela combinação de ação em tempo real e progressão de personagem. Este projeto pretende explorar o pipeline completo de desenvolvimento, desde a conceção do design até à implementação técnica em C# e Unity.
 
 ---
 
