@@ -2,7 +2,7 @@
 
 **Título:** ARPG isometrico em Unity: Do Conceito à Implementação
 
-**Autores:** Bianca Ribeiro, Lucas Quiroz, Ricardo Roda, Rui Moreira
+**Autores:** Bianca Ribeiro, Lucas Queiroz, Ricardo Roda, Rui Moreira
 
 **Curso:** 5425 - Projeto de Tecnologias e Sistemas de Informação
 
@@ -12,7 +12,7 @@
 
 ## Resumo
 
-Este relatório descreve o desenvolvimento de um jogo Action RPG (ARPG) usando a Unity Engine. O objetivo é criar um protótipo funcional inspirado em títulos como Diablo, implementando sistemas de progressão de nível, inventário, árvore de habilidades e controlo de movimento e combate. A metodologia adotada baseia-se em práticas de desenvolvimento ágil, utilizando diagramas UML para a fase de design e testes unitários e de integração para garantir a qualidade do código.
+Este relatório descreve o desenvolvimento de um jogo Action RPG (ARPG) usando a Unity Engine. O objetivo é criar um protótipo funcional inspirado em títulos como Diablo, implementando sistemas de progressão de nível, habilidades, controlo de movimento e combate. A metodologia adotada baseia-se em práticas de desenvolvimento ágil, utilizando diagramas UML para a fase de design e testes unitários e de integração para garantir a qualidade do código.
 
 ---
 
@@ -46,7 +46,7 @@ Os jogos ARPG têm conquistado popularidade pela combinação de ação em tempo
 - **Torchlight (Runic Games, 2009):** ARPG 2D/2.5D com foco em exploração de masmorras e estética vibrante.
 - **Legends of Idleon:** exemplo de ARPG 2D em browser, enfatiza sistemas de progressão automáticos.
 
-As engines mais comuns para 2D incluem Unity e Godot. C# na Unity oferece ampla comunidade e recursos.
+As engines mais comuns incluem Unity e Godot. C# na Unity oferece ampla comunidade e recursos.
 
 ---
 
@@ -54,14 +54,20 @@ As engines mais comuns para 2D incluem Unity e Godot. C# na Unity oferece ampla 
 
 ### Objetivo Geral
 
-Desenvolver um protótipo de ARPG isometrico com funcionalidades-chave de progressão, inventário, árvore de habilidades e combate.
+Desenvolver um protótipo de ARPG isometrico com funcionalidades-chave de progressão e combate.
 
 ### Objetivos Específicos
 
 - Implementar sistema de experiência (XP) e níveis.
+- Implementar movimento em 8 direções e sistema de colisões para combate.
+- Implementar mapas (levels) com inimigos.
+- Implementar habilidades (skills).
+
+### Extras
+
 - Criar interface de inventário com suportes a itens equipáveis e consumíveis.
 - Desenvolver árvore de habilidades com atribuição de pontos de talento.
-- Implementar movimento em 8 direções e sistema de colisões para combate.
+- Sistema de Scoreboard para registo de top scores.
 
 ---
 
@@ -76,6 +82,9 @@ Utilização de Scrum com sprints de duas semanas, reuniões diárias de stand-u
 - **Unity 6**
 - **Linguagem:** C# (.NET Standard)
 - **IDE:** Rider e Visual Studio
+- **3D:** Blender
+- **2D:** GIMP
+- **Assets:** Unity Asset Store, FAB, OpenGameArt
 - **Versionamento:** Git e GitHub
 - **Comunicação:** Discord, Notion e GitHub Projects para gestão de tarefas
 
@@ -85,13 +94,12 @@ Utilização de Scrum com sprints de duas semanas, reuniões diárias de stand-u
 
 ### 5.1 Diagramas UML
 
-- **Caso de Uso:** Player navega pelo mapa, ganha XP ao derrotar inimigos e usa inventário.
-- **Classes Principais:** PlayerController, InventoryManager, SkillTree, EnemyAI, Item, UIManager.
+- **Caso de Uso:** Player navega pelo mapa, ganha XP ao derrotar inimigos e usa habilidades.
+- **Classes Principais:** PlayerController, EnemyAI, UIManager.
 
 ### 5.2 Wireframes e Mockups
 
-- Mockups da HUD: barras de vida, XP, slots de inventário.
-- Layout da árvore de habilidades.
+- Mockups da HUD: barras de vida, XP, slots de habilidades.
 
 ---
 
@@ -104,9 +112,8 @@ Adotado padrão MVC para separação de lógica de jogo (Model), apresentação 
 ### 6.2 Principais Scripts
 
 - **PlayerController.cs:** Lê input do teclado, aplica movimento e animações.
-- **InventoryManager.cs:** Gerencia adição, remoção e uso de itens, atualiza UI.
-- **SkillTreeSystem.cs:** Processa desbloqueio de skills, alocação de pontos.
 - **ExperienceSystem.cs:** Calcula XP, gatilha eventos de nível.
+- **AbilityManager.cs:** Gerencia habilidades, cooldowns e efeitos.
 
 ---
 
@@ -114,15 +121,12 @@ Adotado padrão MVC para separação de lógica de jogo (Model), apresentação 
 
 ### 7.1 Entidades e Atributos
 
-- *Player (PlayerID, Nivel, XP, Vida, Mana)
-- *Item (ItemID, Nome, Tipo, Efeito)
-- *Skill (SkillID, Nome, Descricao, CustoPontos)
-- *Inventário (PlayerID, ItemID, Quantidade)
+- \*Player (PlayerID, Nivel, XP, Vida, Mana)
+- \*Skill (SkillID, Nome, Descricao, CustoPontos)
 
 ### 7.2 Diagrama ER
 
 ```
-Player 1:N Inventário N:1 Item
 Player 1:N ExperienceLog
 Player 1:N SkillAllocation N:1 Skill
 ```
@@ -139,14 +143,13 @@ Player 1:N SkillAllocation N:1 Skill
 
 ## 9. Cronograma Detalhado
 
-| Sprint | Duração | Objetivos |
-| --- | --- | --- |
-| 1 | 2 sem | Documentação e design UML |
-| 2 | 2 sem | PlayerController e sistema de movimento |
-| 3 | 2 sem | InventoryManager e UI |
-| 4 | 2 sem | ExperienceSystem e UI de níveis |
-| 5 | 2 sem | SkillTreeSystem |
-| 6 | 2 sem | Testes, debugging e polimento geral |
+| Sprint | Duração | Objetivos                               |
+| ------ | ------- | --------------------------------------- |
+| 1      | 1 sem   | Documentação e design UML               |
+| 2      | 2 sem   | PlayerController e sistema de movimento |
+| 3      | 2 sem   | Inimigos                                |
+| 4      | 2 sem   | ExperienceSystem e UI de níveis         |
+| 5      | 2 sem   | Testes, debugging e polimento geral     |
 
 ---
 
@@ -154,8 +157,7 @@ Player 1:N SkillAllocation N:1 Skill
 
 - Protótipo com todas as features principais implementadas.
 - Desempenho mínimo: 60 FPS em hardware médio.
-- Taxa de bugs críticos inferior a 1 por hora de uso.
-- Satisfação média dos jogadores ≥ 4/5.
+- Ausência de bugs críticos.
 
 ---
 
@@ -164,17 +166,21 @@ Player 1:N SkillAllocation N:1 Skill
 O protótipo demonstrou viabilidade técnica e aceitação positiva em testes iniciais. Para versões futuras, recomenda-se:
 
 - Adição de sistema de quests.
-- Implementação de efeitos sonoros e música original.
-- Multiplayer local ou online.
+- Skilltree.
+- Inventário.
+- Trading hub in-game.
+- Implementação de inimigos com IA avançada.
+- Implementação de efeitos sonoros e música.
 - Geração procedural de mapas.
 
 ---
 
 ## 12. Referências
 
-- Blizzard Entertainment. *Diablo*. 1996.
-- Unity Technologies. *Unity Manual*. 2025.
-- R. Smith. *Game Programming Patterns*. 2014.
+- Blizzard Entertainment. _Diablo_. 1996.
+- Grinding Gear Games. _Path of Exile_. 2013.
+- Unity Technologies. _Unity Manual_. 2025.
+- R. Smith. _Game Programming Patterns_. 2014.
 
 ---
 
