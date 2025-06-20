@@ -12,7 +12,7 @@
 
 ## Resumo
 
-Este relatório descreve o desenvolvimento de um jogo Action RPG (ARPG) 2D usando a Unity Engine. O objetivo é criar um protótipo funcional inspirado em títulos como Diablo, implementando sistemas de progressão de nível, inventário, árvore de habilidades e controlo de movimento e combate. A metodologia adotada baseia-se em práticas de desenvolvimento ágil, utilizando diagramas UML para a fase de design e testes unitários e de integração para garantir a qualidade do código.
+Este relatório descreve o desenvolvimento de um jogo Action RPG (ARPG) usando a Unity Engine. O objetivo é criar um protótipo funcional inspirado em títulos como Diablo, implementando sistemas de progressão de nível, inventário, árvore de habilidades e controlo de movimento e combate. A metodologia adotada baseia-se em práticas de desenvolvimento ágil, utilizando diagramas UML para a fase de design e testes unitários e de integração para garantir a qualidade do código.
 
 ---
 
