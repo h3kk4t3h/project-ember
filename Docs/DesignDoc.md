@@ -87,6 +87,7 @@ Utilização de Scrum com sprints de duas semanas, reuniões diárias de stand-u
 - **Assets:** Unity Asset Store, FAB, OpenGameArt
 - **Versionamento:** Git e GitHub
 - **Comunicação:** Discord, Notion e GitHub Projects para gestão de tarefas
+- **Base de Dados:** Firebase/NoSQL
 
 ---
 
@@ -118,6 +119,8 @@ Adotado padrão MVC para separação de lógica de jogo (Model), apresentação 
 ---
 
 ## 7. Modelo de Dados
+
+Optou-se pelo uso do Firebase/NoSQL devido à sua flexibilidade, escalabilidade e facilidade de integração com o Unity. O modelo de dados é mantido simples, com foco em entidades principais como jogadores e habilidades.
 
 ### 7.1 Entidades e Atributos
 
