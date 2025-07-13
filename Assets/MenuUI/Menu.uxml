@@ -1,0 +1,80 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/MenuUI/MenuStyle.uss?fileID=7433441132597879392&amp;guid=c948c1dfe500c0640b09f77c86be7a4c&amp;type=3#MenuStyle" />
+    <ui:VisualElement name="root" class="root" style="width: 100%; height: 100%;">
+        <ui:VisualElement name="MainMenu" class="card MainMenuScreen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5%; flex-grow: 1; max-width: none;">
+            <ui:Label text="Project Ember" class="GameTitle" style="font-size: 120%;" />
+            <ui:VisualElement class="ButtonContainer" style="display: flex; flex-direction: column; width: 20%; justify-content: space-evenly; height: auto; flex-grow: 1; max-height: 540px;">
+                <ui:Button name="NewGameButton" text="New Game" class="MainMenuButton first-button" style="height: 10%;" />
+                <ui:Button name="LoadGameButton" text="Load Game" class="MainMenuButton" style="height: 10%;" />
+                <ui:Button name="OptionsButton" text="Options" class="MainMenuButton" style="height: 10%;" />
+                <ui:Button name="ExitButton" text="Exit" class="MainMenuButton last-button" style="height: 10%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="NewGameScreen" class="card NewGameScreen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; flex-direction: column; padding: 5%; gap: 4%;">
+            <ui:Label text="Select Your Class" class="ScreenTitle" style="align-self: center; font-size: 64%;" />
+            <ui:VisualElement class="ClassContainer" style="display: flex; flex-direction: row; width: 100%; gap: 4%;">
+                <ui:VisualElement class="ClassToggleContainer first-slot" style="flex: 1; display: flex; flex-direction: row; align-items: center; gap: 2%; padding: 2%;">
+                    <ui:VisualElement class="ClassIcon" style="width: 10%; height: 100%;" />
+                    <ui:Toggle name="MageToggle" text="Mage" class="ClassToggle" style="flex: 1;" />
+                </ui:VisualElement>
+                <ui:VisualElement class="ClassToggleContainer last-slot" style="flex: 1; display: flex; flex-direction: row; align-items: center; gap: 2%; padding: 2%;">
+                    <ui:VisualElement class="ClassIcon" style="width: 10%; height: 100%;" />
+                    <ui:Toggle name="WarriorToggle" text="Warrior" class="ClassToggle" style="flex: 1;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="ActionContainer" style="display: flex; flex-direction: row; width: 100%; justify-content: center; align-items: center; gap: 3%;">
+                <ui:Button name="ConfirmClassButton" text="Confirm" class="ActionButton first-button" style="width: 15%; height: 8%;" />
+                <ui:Button name="CancelClassButton" text="Back" class="ActionButton last-button" style="width: 15%; height: 8%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="LoadGameScreen" class="card LoadGameScreen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; flex-direction: column; padding: 5%; gap: 4%;">
+            <ui:Label text="Load Game" class="ScreenTitle" style="align-self: center; font-size: 65%;" />
+            <ui:VisualElement name="SaveSlots" class="SaveSlotsContainer" style="display: flex; flex-direction: column; width: 100%; gap: 3%;">
+                <ui:VisualElement class="SaveSlotContainer first-slot" style="display: flex; flex-direction: row; align-items: center; gap: 3%; padding: 2%;">
+                    <ui:Label name="Slot0Label" text="Empty" class="SlotLabel" style="flex: 1;" />
+                    <ui:Button name="LoadSlot0Button" text="Load" class="SlotButton" />
+                    <ui:Button name="DeleteSlot0Button" text="Delete" class="SlotButton" />
+                </ui:VisualElement>
+                <ui:VisualElement class="SaveSlotContainer" style="display: flex; flex-direction: row; align-items: center; gap: 3%; padding: 2%;">
+                    <ui:Label name="Slot1Label" text="Empty" class="SlotLabel" style="flex: 1;" />
+                    <ui:Button name="LoadSlot1Button" text="Load" class="SlotButton" />
+                    <ui:Button name="DeleteSlot1Button" text="Delete" class="SlotButton" />
+                </ui:VisualElement>
+                <ui:VisualElement class="SaveSlotContainer" style="display: flex; flex-direction: row; align-items: center; gap: 3%; padding: 2%;">
+                    <ui:Label name="Slot2Label" text="Empty" class="SlotLabel" style="flex: 1;" />
+                    <ui:Button name="LoadSlot2Button" text="Load" class="SlotButton" />
+                    <ui:Button name="DeleteSlot2Button" text="Delete" class="SlotButton" />
+                </ui:VisualElement>
+                <ui:VisualElement class="SaveSlotContainer last-slot" style="display: flex; flex-direction: row; align-items: center; gap: 3%; padding: 2%;">
+                    <ui:Label name="Slot3Label" text="Empty" class="SlotLabel" style="flex: 1;" />
+                    <ui:Button name="LoadSlot3Button" text="Load" class="SlotButton" />
+                    <ui:Button name="DeleteSlot3Button" text="Delete" class="SlotButton" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="ConfirmationBox" class="ConfirmationBox" style="display: none; flex-direction: column; width: 100%; gap: 2%; padding: 2%; background-color: rgb(34, 34, 34);">
+                <ui:Label name="ConfirmationMessage" text="Are you sure?" class="ConfirmationText" />
+                <ui:VisualElement style="display: flex; flex-direction: row; gap: 3%;">
+                    <ui:Button name="ConfirmButton" text="Yes" class="SlotButton first-button" style="flex: 1;" />
+                    <ui:Button name="CancelButton" text="No" class="SlotButton last-button" style="flex: 1;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button name="BackToMainMenuButton" text="Back" class="ActionButton last-button" style="width: 20%; height: 8%; align-self: flex-end; font-size: 28px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="OptionsScreen" class="card OptionsScreen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; flex-direction: column; padding: 5%; gap: 4%;">
+            <ui:Label text="Options" class="ScreenTitle" style="align-self: center; font-size: 64%;" />
+            <ui:VisualElement class="OptionRow" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; padding: 2% 0;">
+                <ui:Label text="Volume" class="OptionLabel" />
+                <ui:Slider name="VolumeSlider" low-value="0" high-value="1" class="SliderStyled" />
+            </ui:VisualElement>
+            <ui:VisualElement class="OptionRow" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%; padding: 2% 0;">
+                <ui:Label text="Fullscreen" class="OptionLabel" />
+                <ui:Toggle name="FullscreenToggle" class="ToggleStyled" />
+            </ui:VisualElement>
+            <ui:Button name="BackFromOptionsButton" text="Back" class="ActionButton last-button" style="width: 20%; height: 8%; align-self: flex-end; font-size: 28px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="LoadingScreen" class="card LoadingScreen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; flex-direction: column; justify-content: space-between; padding: 5%;">
+            <ui:Label text="Loading..." class="ScreenTitle" style="align-self: center; font-size: 64%;" />
+            <ui:ProgressBar name="LoadingProgressBar" class="ProgressBarStyled" style="width: 100%; height: 5%; display: flex;" low-value="0" high-value="100" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

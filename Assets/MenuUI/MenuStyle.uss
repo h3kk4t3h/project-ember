@@ -1,0 +1,284 @@
+:root {
+    --font-main: "Constantine-lq0q";
+    --color-moonstone: rgb(58, 161, 126);
+    --color-moonstone-dark: rgb(46, 139, 106);
+    --color-gold: rgb(255, 215, 0);
+    --bg-dark: rgb(13, 13, 13);
+    --bg-card: rgb(26, 26, 26);
+    --border-width: 3px;
+    --border-radius: 8px;
+}
+
+.root {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -unity-font-definition: url("project://database/Assets/Fonts/Constantine-lq0q.ttf?fileID=12800000&guid=1ea7a98760dc1b74aa4a686334ab7bc1&type=3#Constantine-lq0q");
+    font-size: 0;
+}
+
+.card {
+    background-color: var(--bg-card);
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: var(--border-radius);
+}
+
+.MainMenuScreen {
+    width: 80%;
+    max-width: 1000px;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.GameTitle {
+    font-size: 150px;
+    color: var(--color-gold);
+    -unity-text-align: middle-center;
+    margin-bottom: 60px;
+}
+
+.ButtonContainer {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.MainMenuButton {
+    height: 100px;
+    background-color: var(--color-moonstone);
+    color: white;
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: var(--border-radius);
+    font-size: 28px;
+    margin-bottom: 24px;
+}
+
+.MainMenuButton:hover {
+    background-color: var(--color-moonstone-dark);
+}
+
+.NewGameScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+}
+
+.LoadGameScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+}
+
+.OptionsScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+}
+
+.LoadingScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+}
+
+.ScreenTitle {
+    font-size: 80px;
+    color: var(--color-gold);
+    -unity-text-align: middle-center;
+    align-self: center;
+    margin-bottom: 40px;
+}
+
+.ClassContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.ClassToggleContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: var(--border-radius);
+    background-color: rgb(34, 34, 34);
+    margin-right: 24px;
+}
+
+.ClassIcon {
+    width: 40px;
+    height: 40px;
+    margin-right: 16px;
+}
+
+.ClassToggle {
+    flex: 1;
+    font-size: 24px;
+    color: white;
+    -unity-text-align: middle-left;
+}
+
+.ActionContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 40px;
+}
+
+.ActionButton {
+    width: 25%;
+    height: 60px;
+    background-color: var(--color-moonstone);
+    color: white;
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: var(--border-radius);
+    font-size: 22px;
+    margin-left: 24px;
+}
+
+.ActionButton:hover {
+    background-color: var(--color-moonstone-dark);
+}
+
+.SaveSlotsContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.SaveSlotContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    background-color: rgb(34, 34, 34);
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: var(--border-radius);
+    margin-bottom: 24px;
+}
+
+.SlotLabel {
+    flex: 1;
+    font-size: 24px;
+    color: white;
+}
+
+.SlotButton {
+    width: 100px;
+    height: 48px;
+    background-color: var(--color-moonstone);
+    color: white;
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: 4px;
+    font-size: 20px;
+    margin-left: 16px;
+}
+
+.SlotButton:hover {
+    background-color: var(--color-moonstone-dark);
+}
+
+.ConfirmationBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: rgb(34, 34, 34);
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: var(--border-radius);
+    margin-top: 40px;
+}
+
+.ConfirmationText {
+    font-size: 22px;
+    color: white;
+    -unity-text-align: middle-center;
+    margin-bottom: 24px;
+}
+
+.OptionRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.OptionLabel {
+    font-size: 22px;
+    color: white;
+}
+
+.SliderStyled {
+    width: 60%;
+}
+
+.ToggleStyled {
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-moonstone);
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: 4px;
+}
+
+.ProgressBarStyled {
+    width: 100%;
+    height: 12px;
+    background-color: rgb(68, 68, 68);
+    border-width: var(--border-width);
+    border-color: var(--color-gold);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+unity-progress-bar > .unity-progress-bar__background {
+    background-color: rgb(68, 68, 68);
+}
+
+unity-progress-bar > .unity-progress-bar__progress {
+    background-color: rgb(255, 215, 0);
+    transition: width 0.2s ease-in-out;
+}
+
