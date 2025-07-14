@@ -15,8 +15,17 @@ public class EnemyAI : MonoBehaviour
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        GameController gameController = FindFirstObjectByType<GameController>();
+        if (gameController != null)
+        {
+            gameController.OnPlayerSpawned += SetPlayerTarget;
+        }
         ApplyConfig();
+    }
+
+    private void SetPlayerTarget(Transform playerTransform)
+    {
+        player = playerTransform;
     }
 
     void ApplyConfig()

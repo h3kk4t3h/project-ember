@@ -34,13 +34,4 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(rb.position + rotatedDirection * movementSpeed * Time.fixedDeltaTime);
     }
 
-    // CameraController integration
-    void Start()
-    {
-        CameraController cameraController = FindFirstObjectByType<CameraController>();
-        if (cameraController != null)
-        {
-            cameraController.SetTarget(transform);
-        }
-    }
 }
