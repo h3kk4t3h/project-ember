@@ -4,7 +4,7 @@ using System;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerStats : MonoBehaviour
 {
-    [SerializeField] private MageClassSO classData;
+    [SerializeField] private ClassSO classData;
     private int baseHealth;
     private int baseMana;
     private float healthRegen;
@@ -115,5 +115,11 @@ public class PlayerStats : MonoBehaviour
     {
         OnDeath?.Invoke();
         Debug.Log("Player has died");
+    }
+
+    public void SetClassSO(ClassSO classSO)
+    {
+        classData = classSO;
+        // Optionally, update stats here if needed
     }
 }
