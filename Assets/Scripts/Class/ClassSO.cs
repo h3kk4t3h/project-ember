@@ -10,5 +10,8 @@ public class ClassSO : ScriptableObject
     public float healthRegen = 1f;
     public float manaRegen = 1f;
     [Header("Other Stats")]
+    public int skillPoints = 0;
+    public int gold = 0;
+    public int xp = 0;
     public float movementSpeed = 5f;
 }
