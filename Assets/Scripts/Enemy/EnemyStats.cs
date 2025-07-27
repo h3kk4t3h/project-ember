@@ -5,16 +5,19 @@ namespace Enemy
     public class EnemyStats : MonoBehaviour
     {
         public EnemyConfigSO config;
+        private EnemyConfigSO configInstance;
         private float currentHealth;
 
         void Start()
         {
-            currentHealth = config.health;
+            configInstance = ScriptableObject.Instantiate(config);
+            currentHealth = configInstance.health;
         }
 
         public void TakeDamage(float damage)
         {
             currentHealth -= damage;
+            Debug.Log($"Enemy took {damage} damage, current health: {currentHealth}");
             if (currentHealth <= 0)
             {
                 Die();
@@ -26,8 +29,8 @@ namespace Enemy
             var player = FindFirstObjectByType<PlayerStats>();
             if (player != null)
             {
-                player.GainXP(config.xpReward);
-                player.GainGold(config.goldReward);
+                player.GainXP(configInstance.xpReward);
+                player.GainGold(configInstance.goldReward);
             }
             Debug.Log("Enemy died");
             Destroy(gameObject);
