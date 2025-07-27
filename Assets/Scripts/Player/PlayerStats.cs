@@ -15,7 +15,6 @@ public class PlayerStats : MonoBehaviour
     public int currentXP { get; private set; }
     public int currentLevel { get; private set; } = 1;
     public int xpToNextLevel { get; private set; } = 100;
-    public int skillPoints { get; private set; } = 0;
     public int maxHealth => baseHealth;
     public int maxMana => baseMana;
 
@@ -98,19 +97,6 @@ public class PlayerStats : MonoBehaviour
         OnManaChanged?.Invoke(currentMana, maxMana);
 
         OnLevelUp?.Invoke(currentLevel);
-
-        skillPoints += 1;
-
-    }
-
-    public bool SpendSkillPoints()
-    {
-        if (skillPoints > 0)
-        {
-            skillPoints--;
-            return true;
-        }
-        return false;
     }
 
     private void ChangeHealth(int delta)
@@ -134,5 +120,6 @@ public class PlayerStats : MonoBehaviour
     public void SetClassSO(ClassSO classSO)
     {
         classData = classSO;
-        }
+        // Optionally, update stats here if needed
+    }
 }
