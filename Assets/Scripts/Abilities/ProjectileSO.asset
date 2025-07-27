@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6737210741ee27c43923df3201c51daf, type: 3}
   m_Name: ProjectileSO
   m_EditorClassIdentifier: 
-  baseDamage: 5
-  fireRate: 4
-  lifeTime: 4
-  cooldown: 0
-  numberOfProjectiles: 3
+  baseDamage: 1
+  fireRate: 100
+  lifeTime: 1
+  cooldown: 1
+  numberOfProjectiles: 10
   spreadBetweenProjectiles: 10
-  burst: 3
-  distanceBetweenBurst: 0.5
-  baseSpeed: 4
-  homming: 1
-  hommingRadius: 1
-  hommingTurnRate: 1
+  burst: 1
+  distanceBetweenBurst: 0
+  baseSpeed: 10
+  homming: 0
+  hommingRadius: 5
+  hommingTurnRate: 0
   returning: 0
   returningTime: 0

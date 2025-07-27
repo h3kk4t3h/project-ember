@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Player;
 
 namespace Enemy
 {
@@ -24,7 +23,7 @@ namespace Enemy
 
         private void Die()
         {
-            var player = FindObjectOfType<PlayerStats>();
+            var player = FindFirstObjectByType<PlayerStats>();
             if (player != null)
             {
                 player.GainXP(config.xpReward);
