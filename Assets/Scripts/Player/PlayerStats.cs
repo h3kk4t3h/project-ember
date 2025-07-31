@@ -4,6 +4,8 @@ using System;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerStats : MonoBehaviour
 {
+    [SerializeField] private GameObject playerHUDPrefab;
+
     [SerializeField] private ClassSO classData;
     private int baseHealth;
     private int baseMana;
@@ -13,7 +15,6 @@ public class PlayerStats : MonoBehaviour
     public int currentHealth { get; private set; }
     public int currentMana { get; private set; }
     public int currentXP { get; private set; }
-    public int currentGold { get; private set; } = 0;
     public int currentLevel { get; private set; } = 1;
     public int xpToNextLevel { get; private set; } = 100;
     public int skillPoints { get; private set; } = 0;
@@ -23,7 +24,6 @@ public class PlayerStats : MonoBehaviour
     public event Action<int, int> OnHealthChanged;
     public event Action<int, int> OnManaChanged;
     public event Action<int, int> OnXPChanged;
-    public event Action<int> OnGoldChanged;
     public event Action<int> OnLevelUp;
     public event Action OnDeath;
 
@@ -52,6 +52,18 @@ public class PlayerStats : MonoBehaviour
         OnXPChanged?.Invoke(currentXP, xpToNextLevel);
 
         InvokeRepeating(nameof(RegenTick), regenInterval, regenInterval);
+
+        if (playerHUDPrefab != null)
+        {
+            GameObject hud = Instantiate(playerHUDPrefab);
+            PlayerHUD hudScript = hud.GetComponent<PlayerHUD>();
+            if (hudScript != null)
+                hudScript.stats = this;
+        }
+        else
+        {
+            Debug.LogError("PlayerStats: esquecido de arrastar o playerHUDPrefab no Inspector!");
+        }
     }
 
     void RegenTick()
@@ -71,23 +83,26 @@ public class PlayerStats : MonoBehaviour
     {
         ChangeHealth(-amount);
         if (currentHealth <= 0) Die();
+
+        // Spawn the “–200” text above the player
+        CombatTextSpawner.Instance.ShowWorldText(
+        $"−{amount}", Color.red, transform.position + Vector3.up * 1.8f);
     }
 
     public void GainXP(int amount)
     {
         currentXP += amount;
+
+        // Spawn the “+50 XP” text above the player
+        CombatTextSpawner.Instance.ShowWorldText(
+        $"+{amount} XP", Color.yellow , transform.position + Vector3.up * 2.2f);
+
         while (currentXP >= xpToNextLevel)
         {
             currentXP -= xpToNextLevel;
             LevelUp();
         }
         OnXPChanged?.Invoke(currentXP, xpToNextLevel);
-    }
-
-    public void GainGold(int amount)
-    {
-        currentGold += amount;
-        OnGoldChanged?.Invoke(currentGold);
     }
 
     private void LevelUp()
@@ -111,7 +126,7 @@ public class PlayerStats : MonoBehaviour
 
     }
 
-    public bool SpendSkillPoint()
+    public bool SpendSkillPoints()
     {
         if (skillPoints > 0)
         {
@@ -142,5 +157,5 @@ public class PlayerStats : MonoBehaviour
     public void SetClassSO(ClassSO classSO)
     {
         classData = classSO;
-    }
+        }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -7,16 +8,39 @@ public class AbilityHandler : MonoBehaviour
     private Plane hitPlane = new Plane(Vector3.up, Vector3.up);
     private Vector3 playerCurrentPosition;
     private Vector3 hitPoint;
-
+    
 
     //Abilities Associated Variables
     public GameObject ability;
     public AbilitySO abilityData;
-    private float timeOfLastShot = 0;
+    private float timeLastSpawn = 0;
+
+    //Input Actions
+    private InputSystemActions inputActions;
+    private InputAction[] abilityUse = new InputAction[7];
+
+    private void Awake()
+    {
+        inputActions = new InputSystemActions();
+    }
+
+    private void OnEnable()
+    {
+        abilityUse[0] = inputActions.Player.Attack;
+        abilityUse[0].Enable();
+        
+    }
+
+    private void OnDisable()
+    {
+        abilityUse[0].Disable();
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        MainCamera = Camera.main;
         abilityData = ability.GetComponent<AbilityBehaviour>().GetAbilitySO();
     }
 
@@ -27,12 +51,10 @@ public class AbilityHandler : MonoBehaviour
         playerCurrentPosition = new Vector3(transform.position.x, 1, transform.position.z);
         hitPoint = GetHitPoint(playerCurrentPosition);
 
-
-        //Shooting Projectile & Timers ---------------------------------------------------------------------------------------------------
-        if (Time.time - timeOfLastShot >= 1/ abilityData.fireRate)
+        //Use Ability
+        if (abilityUse[0].ReadValue<float>() != 0f)
         {
-            ability.GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint);
-            timeOfLastShot = Time.time;
+            UseAbility();
         }
     }
 
@@ -54,5 +76,22 @@ public class AbilityHandler : MonoBehaviour
         return hitPoint;
     }
 
-   
+    private void UseAbility()
+    {
+
+        //Cooldown Ability
+        //if (Time.time - timeLastSpawn >= 1 / abilityData.cooldown && abilityData.cooldownFlag)
+        //{
+        //    ability.GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint);
+        //    timeLastSpawn = Time.time;
+        //}
+
+        //Fire Rate Ability
+        if (Time.time - timeLastSpawn >= 1 / abilityData.fireRate)
+        {
+            ability.GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint);
+            timeLastSpawn = Time.time;
+        }
+
+    }
 }

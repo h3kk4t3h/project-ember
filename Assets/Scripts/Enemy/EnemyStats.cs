@@ -1,39 +1,44 @@
 ﻿using UnityEngine;
 
-namespace Enemy
+
+public class EnemyStats : MonoBehaviour
 {
-    public class EnemyStats : MonoBehaviour
+    public EnemyConfigSO config;
+    private EnemyConfigSO configInstance;
+
+    void Start()
     {
-        public EnemyConfigSO config;
-        private EnemyConfigSO configInstance;
-        private float currentHealth;
+        configInstance = ScriptableObject.Instantiate(config);
+    }
 
-        void Start()
+    public EnemyConfigSO GetEnemyConfigSOInstance()
+    {
+        return config;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        configInstance.health -= damage;
+        Debug.Log($"Enemy took {damage} damage, current health: {configInstance.health}");
+        if (configInstance.health <= 0)
         {
-            configInstance = ScriptableObject.Instantiate(config);
-            currentHealth = configInstance.health;
+            Die();
         }
 
-        public void TakeDamage(float damage)
-        {
-            currentHealth -= damage;
-            Debug.Log($"Enemy took {damage} damage, current health: {currentHealth}");
-            if (currentHealth <= 0)
-            {
-                Die();
-            }
-        }
+        CombatTextSpawner.Instance.ShowWorldText($"{damage}", new Color(1f, 0f, 0.6f), transform.position + Vector3.up * 1.8f);
 
-        private void Die()
+
+    }
+
+    private void Die()
+    {
+        var player = FindFirstObjectByType<PlayerStats>();
+        if (player != null)
         {
-            var player = FindFirstObjectByType<PlayerStats>();
-            if (player != null)
-            {
-                player.GainXP(configInstance.xpReward);
-                player.GainGold(configInstance.goldReward);
-            }
-            Debug.Log("Enemy died");
-            Destroy(gameObject);
+            //player.GainXP(configInstance.xpReward);
+            //player.GainGold(configInstance.goldReward);
         }
+        Debug.Log("Enemy died");
+        Destroy(gameObject);
     }
 }

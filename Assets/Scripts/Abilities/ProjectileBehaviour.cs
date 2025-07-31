@@ -6,14 +6,13 @@ public class ProjectileBehaviour : AbilityBehaviour
 {
     // Projectile Ability specific Variables
     public ProjectileSO projectileData;
-    private float speed;
     private float spawnTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        speed = projectileData.baseSpeed;
         spawnTime = Time.time;
+        //Destroy(gameObject, projectileData.lifeTime);
     }
 
     // Update is called once per frame
@@ -26,13 +25,55 @@ public class ProjectileBehaviour : AbilityBehaviour
         //Projectile States
         LifeTimeCheck(spawnTime);
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            ApplyAbilityDamage(other.gameObject);
+            Destroy(gameObject);
+        }
+    }
 
+
+    //ABILITY GENERAL FUNCTIONS
+
+    //Spawn Ability - Shoot Projectile
+    public override void SpawnAbility(Vector3 playerCurrentPosition, Vector3 hitPoint)
+    {
+
+            //Spawning projectiles
+            for (int burstcount = 0; burstcount < projectileData.burst; burstcount++)
+            {
+                for (int multiCount = 0; multiCount < projectileData.numberOfProjectiles; multiCount++)
+                {
+                    //Setting Spawning Position & Rotation according Burst & MultiProjectiles
+                    Vector3 spawnPosition = GetAbilitySpawnPosition(playerCurrentPosition, hitPoint, burstcount, multiCount);
+                    Quaternion spawnRotation = GetAbilitySpawnRotation(playerCurrentPosition, hitPoint, multiCount);
+
+                    Instantiate(this.gameObject, spawnPosition, spawnRotation);
+
+                }
+            }
+    }
+
+    public override AbilitySO GetAbilitySO()
+    {
+        return projectileData;
+    }
+
+    public override void ApplyAbilityDamage(GameObject enemy)
+    {
+        enemy.GetComponent<EnemyStats>().TakeDamage(projectileData.baseDamage);
+    }
+
+
+    //PROJECTILE SPECIFIC FUNCTIONS
     void ProjectileMovement()
     {
         //Standard direction of Movement
         Vector3 direction = Vector3.forward;
 
-        transform.Translate(direction * speed * Time.deltaTime);
+        transform.Translate(direction * projectileData.baseSpeed * Time.deltaTime);
     }
 
     private void HommingMovement(bool hommingBool)
@@ -81,14 +122,7 @@ public class ProjectileBehaviour : AbilityBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            Destroy(gameObject);
-        }
-    }
-
+    
     private void LifeTimeCheck(float spawnTime)
     {
         if(Time.time - spawnTime >= projectileData.lifeTime)
@@ -119,32 +153,4 @@ public class ProjectileBehaviour : AbilityBehaviour
     }
 
 
-    //SHOOT PROJECTILE
-    public override void SpawnAbility(Vector3 playerCurrentPosition, Vector3 hitPoint)
-    {
-
-        //Shooting Key
-        if (Input.GetKey(KeyCode.Mouse0))
-        {
-
-            //Spawning projectiles
-            for (int burstcount = 0; burstcount < projectileData.burst; burstcount++)
-            {
-                for (int multiCount = 0; multiCount < projectileData.numberOfProjectiles; multiCount++)
-                {
-                    //Setting Spawning Position & Rotation according Burst & MultiProjectiles
-                    Vector3 spawnPosition = GetAbilitySpawnPosition(playerCurrentPosition, hitPoint, burstcount, multiCount);
-                    Quaternion spawnRotation = GetAbilitySpawnRotation(playerCurrentPosition, hitPoint, multiCount);
-
-                    Instantiate(this.gameObject, spawnPosition, spawnRotation);
-
-                }
-            }
-        }
-    }
-
-    public override AbilitySO GetAbilitySO()
-    {
-        return projectileData;
-    }
 }

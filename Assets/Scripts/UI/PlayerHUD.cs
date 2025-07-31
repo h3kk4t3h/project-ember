@@ -1,13 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerHUD : MonoBehaviour
 {
     [Header("References")]
     public PlayerStats stats;
-    public Button yesButton;
+    public Button yesExitButton;
+    public Button yesHubExitButton;
+    public Button yesMainMenuExitButton;
+    public Button mainMenuButton;
+    public GameObject deathPanel;
+    public Button retreatButton;
+
 
     [Header("UI Sliders")]
     public Slider healthFill;
@@ -19,6 +26,10 @@ public class PlayerHUD : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI manaText;
     public TextMeshProUGUI xpText;
+    public TextMeshProUGUI levelUPText;
+    public TextMeshProUGUI skillPointsText;
+
+    public float levelMessageDuration = 3f;
 
     void Start()
     {
@@ -32,6 +43,7 @@ public class PlayerHUD : MonoBehaviour
         stats.OnManaChanged += UpdateMana;
         stats.OnXPChanged += UpdateXP;
         stats.OnLevelUp += UpdateLevel;
+        stats.OnDeath += ShowDeathPanel;
 
         healthFill.minValue = 0;
         healthFill.maxValue = stats.maxHealth;
@@ -46,8 +58,19 @@ public class PlayerHUD : MonoBehaviour
         UpdateMana(stats.currentMana, stats.maxMana);
         UpdateXP(stats.currentXP, stats.xpToNextLevel);
         UpdateLevel(stats.currentLevel);
-        SetupYesButton();
+
+        levelUPText.gameObject.SetActive(false);
+        skillPointsText.gameObject.SetActive(false);
+
+        SetupYesExitButton();
+        SetupYesHubExitButton();
+        SetupYesMainMenuExitButton();
+        HideMainMenuButton();
+        SetupRetreatButton();
     }
+
+
+
     void OnDestroy()
     {
         if (stats != null)
@@ -56,12 +79,12 @@ public class PlayerHUD : MonoBehaviour
             stats.OnManaChanged -= UpdateMana;
             stats.OnXPChanged -= UpdateXP;
             stats.OnLevelUp -= UpdateLevel;
+            stats.OnDeath -= ShowDeathPanel;
         }
     }
 
     void UpdateHealth(int current, int max)
     {
-        // In case maxHealth changes on level up
         healthFill.maxValue = max;
         healthFill.value = current;
         if (healthText != null)
@@ -78,7 +101,6 @@ public class PlayerHUD : MonoBehaviour
 
     void UpdateXP(int currentXP, int xpToNext)
     {
-        Debug.Log($"XP UI updated: {currentXP}/{xpToNext}");
         xpFill.maxValue = xpToNext;
         xpFill.value = currentXP;
         if (xpText != null)
@@ -88,27 +110,77 @@ public class PlayerHUD : MonoBehaviour
     void UpdateLevel(int level)
     {
         levelLabel.text = level.ToString();
+        StartCoroutine(ShowLevelUpMessages(level));
+    }
+
+    private IEnumerator ShowLevelUpMessages(int level)
+    {
+        levelUPText.text = $"Level Up! You are now level {level}!";
+        skillPointsText.text = $"Skill Points: {stats.skillPoints}";
+
+        levelUPText.gameObject.SetActive(true);
+        skillPointsText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(levelMessageDuration);
+
+        levelUPText.gameObject.SetActive(false);
+        skillPointsText.gameObject.SetActive(false);
+    }
+
+    private void SetupYesExitButton()
+    {
+        if (yesExitButton == null)
+            return;
+
+        yesExitButton.onClick.RemoveAllListeners();
+        yesExitButton.onClick.AddListener(() =>
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+        });
+    }
+
+    private void HideMainMenuButton()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 1 && mainMenuButton != null)
+        {
+            mainMenuButton.gameObject.SetActive(false);
+        }
+    }
+
+    private void SetupYesHubExitButton()
+    {
+        if (yesHubExitButton == null)
+            return;
+
+        yesHubExitButton.onClick.RemoveAllListeners();
+        yesHubExitButton.onClick.AddListener(() => SceneManager.LoadScene(1));
+    }
+
+    private void SetupYesMainMenuExitButton()
+    {
+        if (yesMainMenuExitButton == null)
+            return;
+
+        yesMainMenuExitButton.onClick.RemoveAllListeners();
+        yesMainMenuExitButton.onClick.AddListener(() => SceneManager.LoadScene(0));
+    }
+
+    private void ShowDeathPanel()
+    {
+    if (deathPanel != null)
+        deathPanel.SetActive(true);
     }
     
-    private void SetupYesButton()
+    private void SetupRetreatButton()
     {
-        if (yesButton == null)
+        if (retreatButton != null)
         {
-            Debug.LogError("HUD: YesButton not assigned", this);
-            return;
+            retreatButton.onClick.RemoveAllListeners();
+            retreatButton.onClick.AddListener(() => SceneManager.LoadScene(1));
         }
-
-        yesButton.onClick.RemoveAllListeners();
-        yesButton.onClick.AddListener(() =>
-    {
-    #if UNITY_EDITOR
-            // Stop play mode in the editor
-            UnityEditor.EditorApplication.isPlaying = false;
-    #else
-            // Quit application in build
-            Application.Quit();
-    #endif
-        });
-}
-
+    }
 }

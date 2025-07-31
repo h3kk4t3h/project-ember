@@ -4,7 +4,8 @@ using System;
 
 public class EnemyAI : MonoBehaviour
 {
-    public EnemyConfigSO config;
+    [SerializeField] private EnemyConfigSO configInstance;
+
     private NavMeshAgent agent;
     private Transform player;
     private float lastAttack;
@@ -12,53 +13,70 @@ public class EnemyAI : MonoBehaviour
     enum State { Idle, Chase, Attack }
     State state = State.Idle;
 
-    void Awake()
+    private void Awake()
     {
+        configInstance = GetComponent<EnemyStats>().GetEnemyConfigSOInstance();
         agent = GetComponent<NavMeshAgent>();
-        GameController gameController = FindFirstObjectByType<GameController>();
-        if (gameController != null)
-        {
-            gameController.OnPlayerSpawned += SetPlayerTarget;
+
+        if (PlayerController.InstanceTransform != null) {
+            SetPlayerTarget(PlayerController.InstanceTransform);
         }
-        ApplyConfig();
+            ApplyConfig();
+    }
+
+    private void OnEnable()
+    {
+        PlayerController.OnPlayerSpawned += SetPlayerTarget;
+    }
+
+    private void OnDisable()
+    {
+        PlayerController.OnPlayerSpawned -= SetPlayerTarget;
     }
 
     private void SetPlayerTarget(Transform playerTransform)
     {
-        player = playerTransform;
+        if (playerTransform != null) {
+            player = playerTransform;
+        }
     }
 
     void ApplyConfig()
     {
-        agent.speed = config.speed;
-        agent.acceleration = config.acceleration;
-        agent.stoppingDistance = config.stoppingDistance;
+        agent.speed = configInstance.speed;
+        agent.acceleration = configInstance.acceleration;
+        agent.stoppingDistance = configInstance.stoppingDistance;
     }
 
     void Update()
     {
+
         float dist = Vector3.Distance(transform.position, player.position);
         switch (state)
         {
             case State.Idle:
-                if (dist <= config.sightRange) state = State.Chase;
+                if (dist <= configInstance.sightRange) state = State.Chase;
+                Debug.Log("Idle");
                 break;
 
             case State.Chase:
                 agent.SetDestination(player.position);
-                if (dist <= config.attackRange) state = State.Attack;
-                else if (dist > config.sightRange) state = State.Idle;
+                Debug.Log("Chasing");
+                if (dist <= configInstance.attackRange) state = State.Attack;
+                else if (dist > configInstance.sightRange) state = State.Idle;
                 break;
 
             case State.Attack:
                 agent.ResetPath();
                 FacePlayer();
-                if (Time.time >= lastAttack + config.attackCooldown)
+                Debug.Log("Attacking");
+                if (Time.time >= lastAttack + configInstance.attackCooldown)
                 {
-                    player.GetComponent<PlayerStats>()?.TakeDamage(config.damage);
+                    player.GetComponent<PlayerStats>()?.TakeDamage(configInstance.damage);
                     lastAttack = Time.time;
                 }
-                if (dist > config.attackRange + 0.5f) state = State.Chase;
+
+                if (dist > configInstance.attackRange + 0.5f) state = State.Chase;
                 break;
         }
     }
@@ -67,6 +85,7 @@ public class EnemyAI : MonoBehaviour
     {
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0;
+
         if (dir.magnitude > 0f)
         {
             transform.rotation = Quaternion.Slerp(

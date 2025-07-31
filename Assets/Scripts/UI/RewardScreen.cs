@@ -6,7 +6,6 @@ using TMPro;
 public class RewardScreen : MonoBehaviour
 {
     [Header("References")]
-    public PlayerStats playerStats;
     public Button continueButton;
 
     [Header("UI Text")]
@@ -18,6 +17,7 @@ public class RewardScreen : MonoBehaviour
 
     private int rewardXP;
 
+
     void OnEnable()
     {
         rewardXP = Random.Range(minXP, maxXP + 1);
@@ -28,13 +28,9 @@ public class RewardScreen : MonoBehaviour
 
     private void GrantRewardXP()
     {
-        if (playerStats == null)
-        {
-            Debug.LogError("RewardScreen: playerStats not assigned", this);
-            return;
-        }
+        var player = FindFirstObjectByType<PlayerStats>();
 
-        playerStats.GainXP(rewardXP);
+        player.GainXP(rewardXP);
     }
 
     // Show “+N XP” on the panel

@@ -9,8 +9,9 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (target != null)
+        if (target != null) {
             MoveCamera();
+        }
     }
 
     public void SetTarget(Transform newTarget)
@@ -22,6 +23,5 @@ public class CameraController : MonoBehaviour
     {
         Vector3 desiredPosition = target.position + offset;
         transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-        transform.LookAt(target);
     }
 }

@@ -14,10 +14,5 @@ public class EnemyConfigSO : ScriptableObject
     public float attackRange = 2f;
     public int damage = 10;
     public float attackCooldown = 1.5f;
-
-    [Header("Loot")]
-    public int xpReward = 10;
-    public int goldReward = 5;
-
-    // add loot items ?
+        
 }
