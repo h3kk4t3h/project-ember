@@ -11,13 +11,13 @@ public class AbilityHandler : MonoBehaviour
     
 
     //Abilities Associated Variables
-    public GameObject ability;
-    public AbilitySO abilityData;
-    private float timeLastSpawn = 0;
+    public GameObject[] ability = new GameObject[8];
+    public AbilitySO[] abilityData = new AbilitySO[8];
+    private float[] timeLastSpawn = {0, 0, 0, 0, 0 ,0 ,0, 0};
 
     //Input Actions
     private InputSystemActions inputActions;
-    private InputAction[] abilityUse = new InputAction[7];
+    private InputAction[] abilityUse = new InputAction[8];
 
     private void Awake()
     {
@@ -26,14 +26,28 @@ public class AbilityHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        abilityUse[0] = inputActions.Player.Attack;
-        abilityUse[0].Enable();
+        abilityUse[0] = inputActions.Player.Ability1;
+        abilityUse[1] = inputActions.Player.Ability2;
+        abilityUse[2] = inputActions.Player.Ability3;
+        abilityUse[3] = inputActions.Player.Ability4;
+        abilityUse[4] = inputActions.Player.Ability5;
+        abilityUse[5] = inputActions.Player.Dash;
+        abilityUse[6] = inputActions.Player.Item1;
+        abilityUse[7] = inputActions.Player.Item2;
+
+        foreach(InputAction ability in abilityUse)
+        {
+            ability.Enable();
+        }
         
     }
 
     private void OnDisable()
     {
-        abilityUse[0].Disable();
+        foreach (InputAction ability in abilityUse)
+        {
+            ability.Disable();
+        }
     }
 
 
@@ -41,7 +55,11 @@ public class AbilityHandler : MonoBehaviour
     void Start()
     {
         MainCamera = Camera.main;
-        abilityData = ability.GetComponent<AbilityBehaviour>().GetAbilitySO();
+        for (int i = 0; i < ability.Length; i++)
+        {
+            abilityData[i] = ability[i].GetComponent<AbilityBehaviour>().GetAbilitySO();
+            timeLastSpawn[i] = Time.time;
+        }
     }
 
     // Update is called once per frame
@@ -51,10 +69,15 @@ public class AbilityHandler : MonoBehaviour
         playerCurrentPosition = new Vector3(transform.position.x, 1, transform.position.z);
         hitPoint = GetHitPoint(playerCurrentPosition);
 
+
         //Use Ability
-        if (abilityUse[0].ReadValue<float>() != 0f)
+        //abilityUse[0].ReadValue<float>() != 0f)
+        for(int i = 0; i < 6; i++)
         {
-            UseAbility();
+            if(abilityUse[i].ReadValue<float>() != 0f)
+            {
+                UseAbility(i);
+            }
         }
     }
 
@@ -76,21 +99,21 @@ public class AbilityHandler : MonoBehaviour
         return hitPoint;
     }
 
-    private void UseAbility()
+    private void UseAbility(int index)
     {
 
         //Cooldown Ability
-        //if (Time.time - timeLastSpawn >= 1 / abilityData.cooldown && abilityData.cooldownFlag)
-        //{
-        //    ability.GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint);
-        //    timeLastSpawn = Time.time;
-        //}
+        if (Time.time - timeLastSpawn[index] >= abilityData[index].cooldown && abilityData[index].cooldownFlag)
+        {
+            timeLastSpawn[index] = Time.time;
+            StartCoroutine(ability[index].GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint));
+        }
 
         //Fire Rate Ability
-        if (Time.time - timeLastSpawn >= 1 / abilityData.fireRate)
+        if (Time.time - timeLastSpawn[index] >= 1 / abilityData[index].fireRate && !(abilityData[index].cooldownFlag))
         {
-            ability.GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint);
-            timeLastSpawn = Time.time;
+            timeLastSpawn[index] = Time.time;
+            StartCoroutine(ability[index].GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint));
         }
 
     }

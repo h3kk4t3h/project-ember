@@ -6,10 +6,19 @@ public class EnemyAI : MonoBehaviour
 {
     [SerializeField] private EnemyConfigSO configInstance;
 
+    //Enemy General Variables
     private NavMeshAgent agent;
     private Transform player;
     private float lastAttack;
 
+    //Abilities Associated Variables
+    private Vector3 currentPosition;
+    private Vector3 hitPoint;
+    public GameObject ability;
+    public AbilitySO abilityData;
+    private float timeLastSpawn = 0;
+
+    //Enemy State Vaiables
     enum State { Idle, Chase, Attack }
     State state = State.Idle;
 
@@ -22,6 +31,8 @@ public class EnemyAI : MonoBehaviour
             SetPlayerTarget(PlayerController.InstanceTransform);
         }
             ApplyConfig();
+
+        abilityData = ability.GetComponent<AbilityBehaviour>().GetAbilitySO();
     }
 
     private void OnEnable()
@@ -50,18 +61,21 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        //Calculate Targeted Position and Rotation for Projectile
+        currentPosition = new Vector3(transform.position.x, 1, transform.position.z);
+        hitPoint = new Vector3(player.position.x, 1, player.position.z); ;
 
         float dist = Vector3.Distance(transform.position, player.position);
         switch (state)
         {
             case State.Idle:
                 if (dist <= configInstance.sightRange) state = State.Chase;
-                Debug.Log("Idle");
+
                 break;
 
             case State.Chase:
                 agent.SetDestination(player.position);
-                Debug.Log("Chasing");
+
                 if (dist <= configInstance.attackRange) state = State.Attack;
                 else if (dist > configInstance.sightRange) state = State.Idle;
                 break;
@@ -69,14 +83,15 @@ public class EnemyAI : MonoBehaviour
             case State.Attack:
                 agent.ResetPath();
                 FacePlayer();
-                Debug.Log("Attacking");
-                if (Time.time >= lastAttack + configInstance.attackCooldown)
-                {
-                    player.GetComponent<PlayerStats>()?.TakeDamage(configInstance.damage);
-                    lastAttack = Time.time;
-                }
 
-                if (dist > configInstance.attackRange + 0.5f) state = State.Chase;
+                //if (Time.time >= lastAttack + configInstance.attackCooldown)
+                //{
+                //    player.GetComponent<PlayerStats>()?.TakeDamage(configInstance.damage);
+                //    lastAttack = Time.time;
+                //}
+                UseAbility();
+
+                if (dist > configInstance.attackRange * 0.5f) state = State.Chase;
                 break;
         }
     }
@@ -94,5 +109,25 @@ public class EnemyAI : MonoBehaviour
                 10f * Time.deltaTime
             );
         }
+    }
+
+    //ABILITY FUNCTIONS
+    private void UseAbility()
+    {
+
+        //Cooldown Ability
+        //if (Time.time - timeLastSpawn >= 1 / abilityData.cooldown && abilityData.cooldownFlag)
+        //{
+        //    ability.GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint);
+        //    timeLastSpawn = Time.time;
+        //}
+
+        //Fire Rate Ability
+        if (Time.time - timeLastSpawn >= 1 / abilityData.fireRate)
+        {
+            ability.GetComponent<AbilityBehaviour>().SpawnAbility(currentPosition, hitPoint);
+            timeLastSpawn = Time.time;
+        }
+
     }
 }

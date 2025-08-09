@@ -1,13 +1,20 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] CameraController cameraController;
+    [SerializeField] private CameraController cameraController;
     public SpawnerSO spawnerConfig;
     public int waveNumber = 1;
+    
+    private Scene currenctScene;
+
 
     void Awake() {
+        currenctScene = SceneManager.GetActiveScene();
+
         if (cameraController == null) {
             cameraController = GetComponent<CameraController>();
         }
@@ -17,21 +24,34 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        spawnerConfig.spawnerNests = GameObject.FindGameObjectsWithTag("Spawner"); ;
+    void Start() {
+        if (SceneManager.Equals(currenctScene, SceneManager.GetSceneByName("Arena"))) {
+            spawnerConfig.spawnerNests = GameObject.FindGameObjectsWithTag("Spawner");
+            Debug.Log("Finding Spawners");
+        }
     }
 
     private void Update()
     {
-        spawnerConfig.enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-
-        if (spawnerConfig.enemyCount == 0)
+        if (SceneManager.Equals(currenctScene, SceneManager.GetSceneByName("Arena")))
         {
-            StartCoroutine(spawnerConfig.SpawnTimer());
-            spawnerConfig.SpawnWave(waveNumber);
-            waveNumber++;
+            spawnerConfig.enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+            Debug.Log("Fetching enemies!");
+
+
+            if (spawnerConfig.enemyCount == 0 && spawnerConfig.spawnFlag)
+            {
+                StartCoroutine(spawnerConfig.SpawnTimer());
+                spawnerConfig.SpawnWave(waveNumber);
+                waveNumber++;
+            }
         }
+    }
+
+    public IEnumerator WaitTimer(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
     }
 
     private void OnEnable() {
@@ -45,4 +65,5 @@ public class GameController : MonoBehaviour
     private void SetCameraTarget(Transform playerTransform) {
         cameraController.SetTarget(playerTransform);
     }
+
 }

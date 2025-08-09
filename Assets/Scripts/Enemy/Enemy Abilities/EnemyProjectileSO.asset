@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6737210741ee27c43923df3201c51daf, type: 3}
-  m_Name: ProjectileSO
+  m_Name: EnemyProjectileSO
   m_EditorClassIdentifier: 
   baseDamage: 5
-  fireRate: 1
-  lifeTime: 10
+  fireRate: 2
+  lifeTime: 3
   cooldownFlag: 0
   cooldown: 0
-  targetTags: Enemy
-  numberOfProjectiles: 3
-  spreadBetweenProjectiles: 10
+  targetTags: Player
+  numberOfProjectiles: 1
+  spreadBetweenProjectiles: 0
   burst: 1
-  distanceBetweenBurst: 0.5
+  distanceBetweenBurst: 0
   baseSpeed: 10
   homming: 0
-  hommingRadius: 10
-  hommingTurnRate: 1
+  hommingRadius: 5
+  hommingTurnRate: 0
   returning: 0
   returningTime: 0

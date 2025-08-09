@@ -2,27 +2,41 @@ using UnityEngine;
 using System;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : CharacterStats
 {
     [SerializeField] private GameObject playerHUDPrefab;
 
     [SerializeField] private ClassSO classData;
-    private int baseHealth;
-    private int baseMana;
-    private float healthRegen;
+    private float baseHealth;
+    private float baseMana;
     private float manaRegen;
+    private float spellPower; 
 
-    public int currentHealth { get; private set; }
-    public int currentMana { get; private set; }
+    // Armor
+    [SerializeField] private float baseArmor = 50f;
+    [SerializeField] private float armorRegenRate = 10f; 
+    [SerializeField] private float armorRegenDelay = 2.5f; 
+    [SerializeField, Tooltip("If damage > this value ignore armor and deal full damage to health")]
+    private float armorBreakThreshold = 40f;
+    private float currentArmor;
+    private float lastDamageTime;
+    private bool isArmorRegenerating = false;
+
+    public float currentHealth { get; private set; }
+    public float currentMana { get; private set; }
+    public float CurrentArmor => currentArmor;
+    public float maxArmor => baseArmor;
     public int currentXP { get; private set; }
     public int currentLevel { get; private set; } = 1;
     public int xpToNextLevel { get; private set; } = 100;
     public int skillPoints { get; private set; } = 0;
-    public int maxHealth => baseHealth;
-    public int maxMana => baseMana;
+    public float maxHealth => baseHealth;
+    public float maxMana => baseMana;
+    public float SpellPower => spellPower;
 
-    public event Action<int, int> OnHealthChanged;
-    public event Action<int, int> OnManaChanged;
+    public event Action<float, float> OnHealthChanged;
+    public event Action<float, float> OnManaChanged;
+    public event Action<float, float> OnArmorChanged;
     public event Action<int, int> OnXPChanged;
     public event Action<int> OnLevelUp;
     public event Action OnDeath;
@@ -38,17 +52,28 @@ public class PlayerStats : MonoBehaviour
             return;
         }
         baseHealth = classData.baseHealth;
-        baseMana = classData.baseMana;
-        healthRegen = classData.healthRegen;
-        manaRegen = classData.manaRegen;
+        if (classData is MageClassSO mage)
+        {
+            baseMana = mage.baseMana;
+            spellPower = mage.spellPower;
+            manaRegen = mage.manaRegenRate;
+        }
+        else
+        {
+            baseMana = 0f;
+            spellPower = 0f;
+            manaRegen = 0f;
+        }
 
         currentHealth = maxHealth;
         currentMana = maxMana;
+        currentArmor = maxArmor;
         currentXP = 0;
         currentLevel = 1;
         xpToNextLevel = 100;
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         OnManaChanged?.Invoke(currentMana, maxMana);
+        OnArmorChanged?.Invoke(currentArmor, maxArmor);
         OnXPChanged?.Invoke(currentXP, xpToNextLevel);
 
         InvokeRepeating(nameof(RegenTick), regenInterval, regenInterval);
@@ -68,35 +93,71 @@ public class PlayerStats : MonoBehaviour
 
     void RegenTick()
     {
-        ChangeHealth(Mathf.FloorToInt(healthRegen));
         ChangeMana(Mathf.FloorToInt(manaRegen));
+        if (!isArmorRegenerating && Time.time - lastDamageTime >= armorRegenDelay && currentArmor < maxArmor)
+        {
+            isArmorRegenerating = true;
+        }
+        if (isArmorRegenerating && currentArmor < maxArmor)
+        {
+            RegenerateArmor();
+        }
+        if (isArmorRegenerating && currentArmor >= maxArmor)
+        {
+            isArmorRegenerating = false;
+        }
     }
 
-    public bool UseMana(int amount)
+    private void RegenerateArmor()
+    {
+        float prevArmor = currentArmor;
+        currentArmor = Mathf.Clamp(currentArmor + armorRegenRate, 0, maxArmor);
+        if (currentArmor != prevArmor)
+            OnArmorChanged?.Invoke(currentArmor, maxArmor);
+    }
+
+    public bool UseMana(float amount)
     {
         if (currentMana < amount) return false;
         ChangeMana(-amount);
         return true;
     }
 
-    public void TakeDamage(int amount)
+    public override void TakeDamage(float amount)
     {
-        ChangeHealth(-amount);
-        if (currentHealth <= 0) Die();
-
-        // Spawn the “–200” text above the player
+        // Stop armor regen on taking damage
+        isArmorRegenerating = false;
+        if (amount > armorBreakThreshold)
+        {
+            ChangeHealth(-amount);
+            if (currentHealth <= 0) Die();
+        }
+        else
+        {
+            float damageLeft = amount;
+            if (currentArmor > 0)
+            {
+                float absorbed = Mathf.Min(currentArmor, damageLeft);
+                currentArmor -= absorbed;
+                damageLeft -= absorbed;
+                OnArmorChanged?.Invoke(currentArmor, maxArmor);
+            }
+            if (damageLeft > 0)
+            {
+                ChangeHealth(-damageLeft);
+                if (currentHealth <= 0) Die();
+            }
+        }
+        lastDamageTime = Time.time;
         CombatTextSpawner.Instance.ShowWorldText(
-        $"−{amount}", Color.red, transform.position + Vector3.up * 1.8f);
+            $"−{amount}", Color.red, transform.position + Vector3.up * 1.8f);
     }
 
     public void GainXP(int amount)
     {
         currentXP += amount;
-
-        // Spawn the “+50 XP” text above the player
         CombatTextSpawner.Instance.ShowWorldText(
-        $"+{amount} XP", Color.yellow , transform.position + Vector3.up * 2.2f);
-
+            $"+{amount} XP", Color.yellow , transform.position + Vector3.up * 2.2f);
         while (currentXP >= xpToNextLevel)
         {
             currentXP -= xpToNextLevel;
@@ -109,21 +170,27 @@ public class PlayerStats : MonoBehaviour
     {
         currentLevel++;
         xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.2f);
-
         baseHealth += 10;
-        baseMana += 5;
-        healthRegen += 0.2f;
-        manaRegen += 0.5f;
-
+        if (classData is MageClassSO mage)
+        {
+            baseMana += 10;
+            spellPower += 5;
+            manaRegen += 1f;
+        }
+        else
+        {
+            baseMana += 5;
+            manaRegen += 0.5f;
+        }
+        baseArmor += 5f;
+        currentArmor = maxArmor;
+        OnArmorChanged?.Invoke(currentArmor, maxArmor);
         currentHealth = maxHealth;
         currentMana = maxMana;
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         OnManaChanged?.Invoke(currentMana, maxMana);
-
         OnLevelUp?.Invoke(currentLevel);
-
         skillPoints += 1;
-
     }
 
     public bool SpendSkillPoints()
@@ -136,19 +203,25 @@ public class PlayerStats : MonoBehaviour
         return false;
     }
 
-    private void ChangeHealth(int delta)
+    private void ChangeHealth(float delta)
     {
         currentHealth = Mathf.Clamp(currentHealth + delta, 0, maxHealth);
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
-    private void ChangeMana(int delta)
+    private void ChangeMana(float delta)
     {
         currentMana = Mathf.Clamp(currentMana + delta, 0, maxMana);
         OnManaChanged?.Invoke(currentMana, maxMana);
     }
 
-    private void Die()
+    // Health pots
+    public void Heal(float amount)
+    {
+        ChangeHealth(amount);
+    }
+
+    public override void Die()
     {
         OnDeath?.Invoke();
         Debug.Log("Player has died");
@@ -157,5 +230,6 @@ public class PlayerStats : MonoBehaviour
     public void SetClassSO(ClassSO classSO)
     {
         classData = classSO;
-        }
+      
+    }
 }

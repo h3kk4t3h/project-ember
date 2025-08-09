@@ -4,11 +4,6 @@ using UnityEngine;
 public class ClassSO : ScriptableObject
 {
     [Header("Base Attributes")]
-    public int baseHealth = 100;
-    public int baseMana = 100;
-    [Header("Regen Rates (per sec)")]
-    public float healthRegen = 1f;
-    public float manaRegen = 1f;
-    [Header("Other Stats")]
+    public float baseHealth = 100;  
     public float movementSpeed = 5f;
 }

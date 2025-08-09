@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: SpawnerSO
   m_EditorClassIdentifier: 
   enemies:
+  - {fileID: 33934788781623479, guid: 04701f3893e39734a99c030d076a211f, type: 3}
   - {fileID: 33934788781623479, guid: 026aac7fe24929d40a8373096a8c9815, type: 3}
-  waveSize: 08000000
+  waveSize: 0800000004000000
   waveSpawnTimer: 100
   spawnerNests:
   - {fileID: 0}
@@ -25,4 +26,5 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  enemyCount: 23
+  enemyCount: 16
+  spawnFlag: 1

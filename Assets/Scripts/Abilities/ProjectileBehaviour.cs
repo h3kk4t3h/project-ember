@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,7 +13,6 @@ public class ProjectileBehaviour : AbilityBehaviour
     void Start()
     {
         spawnTime = Time.time;
-        //Destroy(gameObject, projectileData.lifeTime);
     }
 
     // Update is called once per frame
@@ -27,7 +27,7 @@ public class ProjectileBehaviour : AbilityBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag(projectileData.targetTags.ToString()))
         {
             ApplyAbilityDamage(other.gameObject);
             Destroy(gameObject);
@@ -38,22 +38,23 @@ public class ProjectileBehaviour : AbilityBehaviour
     //ABILITY GENERAL FUNCTIONS
 
     //Spawn Ability - Shoot Projectile
-    public override void SpawnAbility(Vector3 playerCurrentPosition, Vector3 hitPoint)
+    public override IEnumerator SpawnAbility(Vector3 userCurrentPosition, Vector3 hitPoint)
     {
 
             //Spawning projectiles
-            for (int burstcount = 0; burstcount < projectileData.burst; burstcount++)
+            for (int burstCount = 0; burstCount < projectileData.burst; burstCount++)
             {
                 for (int multiCount = 0; multiCount < projectileData.numberOfProjectiles; multiCount++)
                 {
                     //Setting Spawning Position & Rotation according Burst & MultiProjectiles
-                    Vector3 spawnPosition = GetAbilitySpawnPosition(playerCurrentPosition, hitPoint, burstcount, multiCount);
-                    Quaternion spawnRotation = GetAbilitySpawnRotation(playerCurrentPosition, hitPoint, multiCount);
+                    Vector3 spawnPosition = GetAbilitySpawnPosition(userCurrentPosition, hitPoint, burstCount, multiCount);
+                    Quaternion spawnRotation = GetAbilitySpawnRotation(userCurrentPosition, hitPoint, multiCount);
 
                     Instantiate(this.gameObject, spawnPosition, spawnRotation);
 
                 }
             }
+        return null;
     }
 
     public override AbilitySO GetAbilitySO()
@@ -61,9 +62,14 @@ public class ProjectileBehaviour : AbilityBehaviour
         return projectileData;
     }
 
-    public override void ApplyAbilityDamage(GameObject enemy)
+    public float CalculateAbilityDamage()
     {
-        enemy.GetComponent<EnemyStats>().TakeDamage(projectileData.baseDamage);
+        return projectileData.baseDamage;
+    }
+
+    public override void ApplyAbilityDamage(GameObject target)
+    {
+        target.GetComponent<CharacterStats>().TakeDamage(CalculateAbilityDamage());
     }
 
 
@@ -91,7 +97,7 @@ public class ProjectileBehaviour : AbilityBehaviour
             //Find closest target enemy
             foreach (Collider enemy in enemiesInRange)
             {
-                if (enemy.gameObject.CompareTag("Enemy"))
+                if (enemy.gameObject.CompareTag(projectileData.targetTags.ToString()))
                 {
                     float enemyDistance = (new Vector3((enemy.transform.position.x - transform.position.x), 0, (enemy.transform.position.z - transform.position.z))).magnitude;
                     if (distance > enemyDistance || distance == 0)
@@ -131,20 +137,20 @@ public class ProjectileBehaviour : AbilityBehaviour
         }
     }
 
-    public Vector3 GetAbilitySpawnPosition(Vector3 playerCurrentPosition, Vector3 hitPoint, int burstcount, int multiCount)
+    public Vector3 GetAbilitySpawnPosition(Vector3 userCurrentPosition, Vector3 hitPoint, int burstCount, int multiCount)
     {
         //Calculate Spawn Position with burst iteration in mind
-        Vector3 localSpawnPosition = ((hitPoint - playerCurrentPosition).normalized) * (1 + projectileData.distanceBetweenBurst * burstcount);
+        Vector3 localSpawnPosition = ((hitPoint - userCurrentPosition).normalized) * (1 + projectileData.distanceBetweenBurst * burstCount);
 
-        //Rotate Spawn position according Multi projectile rotation
+        //Rotate Spawn Position according Multi projectile rotation
         localSpawnPosition = Quaternion.AngleAxis(-projectileData.spreadBetweenProjectiles * (((float)(projectileData.numberOfProjectiles - 1) / 2) - multiCount), Vector3.up) * localSpawnPosition;
-        return localSpawnPosition + playerCurrentPosition;
+        return localSpawnPosition + userCurrentPosition;
     }
 
-    public Quaternion GetAbilitySpawnRotation(Vector3 playerCurrentPosition, Vector3 hitPoint, int multiCount)
+    public Quaternion GetAbilitySpawnRotation(Vector3 userCurrentPosition, Vector3 hitPoint, int multiCount)
     {
         //Calculate Spawn Rotation
-        Quaternion spawnRotation = Quaternion.LookRotation((hitPoint - playerCurrentPosition).normalized, Vector3.up);
+        Quaternion spawnRotation = Quaternion.LookRotation((hitPoint - userCurrentPosition).normalized, Vector3.up);
 
         //Rotate Spawn Rotation according Multi projectile rotation
         spawnRotation = Quaternion.AngleAxis(-projectileData.spreadBetweenProjectiles * (((float)(projectileData.numberOfProjectiles - 1) / 2) - multiCount), Vector3.up) * spawnRotation;

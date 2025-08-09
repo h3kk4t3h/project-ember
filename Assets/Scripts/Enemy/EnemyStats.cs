@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class EnemyStats : MonoBehaviour
+public class EnemyStats : CharacterStats
 {
     public EnemyConfigSO config;
     private EnemyConfigSO configInstance;
@@ -16,7 +16,7 @@ public class EnemyStats : MonoBehaviour
         return config;
     }
 
-    public void TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
         configInstance.health -= damage;
         Debug.Log($"Enemy took {damage} damage, current health: {configInstance.health}");
@@ -30,12 +30,12 @@ public class EnemyStats : MonoBehaviour
 
     }
 
-    private void Die()
+    public override void Die()
     {
         var player = FindFirstObjectByType<PlayerStats>();
         if (player != null)
         {
-            //player.GainXP(configInstance.xpReward);
+            player.GainXP(configInstance.xpReward);
             //player.GainGold(configInstance.goldReward);
         }
         Debug.Log("Enemy died");

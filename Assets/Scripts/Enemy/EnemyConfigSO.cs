@@ -12,7 +12,9 @@ public class EnemyConfigSO : ScriptableObject
     public float health = 100f;
     public float sightRange = 10f;
     public float attackRange = 2f;
-    public int damage = 10;
     public float attackCooldown = 1.5f;
-        
+
+    [Header("Rewards")]
+    public int xpReward = 5;
+
 }

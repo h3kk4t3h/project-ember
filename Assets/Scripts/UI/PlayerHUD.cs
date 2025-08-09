@@ -8,13 +8,8 @@ public class PlayerHUD : MonoBehaviour
 {
     [Header("References")]
     public PlayerStats stats;
-    public Button yesExitButton;
-    public Button yesHubExitButton;
-    public Button yesMainMenuExitButton;
-    public Button mainMenuButton;
     public GameObject deathPanel;
     public Button retreatButton;
-
 
     [Header("UI Sliders")]
     public Slider healthFill;
@@ -62,15 +57,10 @@ public class PlayerHUD : MonoBehaviour
         levelUPText.gameObject.SetActive(false);
         skillPointsText.gameObject.SetActive(false);
 
-        SetupYesExitButton();
-        SetupYesHubExitButton();
-        SetupYesMainMenuExitButton();
-        HideMainMenuButton();
         SetupRetreatButton();
     }
 
-
-
+    
     void OnDestroy()
     {
         if (stats != null)
@@ -83,7 +73,7 @@ public class PlayerHUD : MonoBehaviour
         }
     }
 
-    void UpdateHealth(int current, int max)
+    void UpdateHealth(float current, float max)
     {
         healthFill.maxValue = max;
         healthFill.value = current;
@@ -91,7 +81,7 @@ public class PlayerHUD : MonoBehaviour
             healthText.text = $"{current} / {max}";
     }
 
-    void UpdateMana(int current, int max)
+    void UpdateMana(float current, float max)
     {
         manaFill.maxValue = max;
         manaFill.value = current;
@@ -127,47 +117,6 @@ public class PlayerHUD : MonoBehaviour
         skillPointsText.gameObject.SetActive(false);
     }
 
-    private void SetupYesExitButton()
-    {
-        if (yesExitButton == null)
-            return;
-
-        yesExitButton.onClick.RemoveAllListeners();
-        yesExitButton.onClick.AddListener(() =>
-        {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
-        });
-    }
-
-    private void HideMainMenuButton()
-    {
-        if (SceneManager.GetActiveScene().buildIndex == 1 && mainMenuButton != null)
-        {
-            mainMenuButton.gameObject.SetActive(false);
-        }
-    }
-
-    private void SetupYesHubExitButton()
-    {
-        if (yesHubExitButton == null)
-            return;
-
-        yesHubExitButton.onClick.RemoveAllListeners();
-        yesHubExitButton.onClick.AddListener(() => SceneManager.LoadScene(1));
-    }
-
-    private void SetupYesMainMenuExitButton()
-    {
-        if (yesMainMenuExitButton == null)
-            return;
-
-        yesMainMenuExitButton.onClick.RemoveAllListeners();
-        yesMainMenuExitButton.onClick.AddListener(() => SceneManager.LoadScene(0));
-    }
 
     private void ShowDeathPanel()
     {

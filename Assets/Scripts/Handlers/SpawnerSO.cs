@@ -15,6 +15,7 @@ public class SpawnerSO : ScriptableObject
     //Spawner Logistics
     public GameObject[] spawnerNests;
     public int enemyCount;
+    public bool spawnFlag = true;
 
     public void SpawnWave(int waveNumber)
     {
@@ -33,6 +34,10 @@ public class SpawnerSO : ScriptableObject
         while(enemyAmount > 0)
         {
             int spawNumberPerNest = enemyAmount / spawnerNests.Length;
+            if(spawNumberPerNest == 0)
+            {
+                spawNumberPerNest = 1;
+            }
 
             foreach (GameObject spawnerNest in spawnerNests)
             {
@@ -40,7 +45,8 @@ public class SpawnerSO : ScriptableObject
                 {
                     Instantiate(enemyType, GetRandomSpawnPosition(spawnerNest), enemyType.transform.rotation);
                     enemyAmount--;
-                    if(enemyAmount == 0) break;
+                    if(enemyAmount == 0) 
+                        return;
                 }
 
             }
