@@ -54,7 +54,7 @@ public class ProjectileBehaviour : AbilityBehaviour
 
                 }
             }
-        return null;
+        yield return new WaitForSeconds(100);
     }
 
     public override AbilitySO GetAbilitySO()
@@ -62,9 +62,10 @@ public class ProjectileBehaviour : AbilityBehaviour
         return projectileData;
     }
 
-    public float CalculateAbilityDamage()
+    public override float CalculateAbilityDamage()
     {
-        return projectileData.baseDamage;
+        float abilityDamage = projectileData.baseDamage;
+        return abilityDamage;
     }
 
     public override void ApplyAbilityDamage(GameObject target)

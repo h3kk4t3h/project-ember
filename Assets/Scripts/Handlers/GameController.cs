@@ -27,7 +27,7 @@ public class GameController : MonoBehaviour
     void Start() {
         if (SceneManager.Equals(currenctScene, SceneManager.GetSceneByName("Arena"))) {
             spawnerConfig.spawnerNests = GameObject.FindGameObjectsWithTag("Spawner");
-            Debug.Log("Finding Spawners");
+            //Debug.Log("Finding Spawners");
         }
     }
 
@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour
         if (SceneManager.Equals(currenctScene, SceneManager.GetSceneByName("Arena")))
         {
             spawnerConfig.enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-            Debug.Log("Fetching enemies!");
+            //Debug.Log("Fetching enemies!");
 
 
             if (spawnerConfig.enemyCount == 0 && spawnerConfig.spawnFlag)

@@ -84,11 +84,6 @@ public class EnemyAI : MonoBehaviour
                 agent.ResetPath();
                 FacePlayer();
 
-                //if (Time.time >= lastAttack + configInstance.attackCooldown)
-                //{
-                //    player.GetComponent<PlayerStats>()?.TakeDamage(configInstance.damage);
-                //    lastAttack = Time.time;
-                //}
                 UseAbility();
 
                 if (dist > configInstance.attackRange * 0.5f) state = State.Chase;
@@ -116,16 +111,16 @@ public class EnemyAI : MonoBehaviour
     {
 
         //Cooldown Ability
-        //if (Time.time - timeLastSpawn >= 1 / abilityData.cooldown && abilityData.cooldownFlag)
-        //{
-        //    ability.GetComponent<AbilityBehaviour>().SpawnAbility(playerCurrentPosition, hitPoint);
-        //    timeLastSpawn = Time.time;
-        //}
+        if (Time.time - timeLastSpawn >= abilityData.cooldown && abilityData.cooldownFlag)
+        {
+            StartCoroutine(ability.GetComponent<AbilityBehaviour>().SpawnAbility(currentPosition, hitPoint));
+            timeLastSpawn = Time.time;
+        }
 
         //Fire Rate Ability
-        if (Time.time - timeLastSpawn >= 1 / abilityData.fireRate)
+        if (Time.time - timeLastSpawn >= 1 / abilityData.fireRate && !(abilityData.cooldownFlag))
         {
-            ability.GetComponent<AbilityBehaviour>().SpawnAbility(currentPosition, hitPoint);
+            StartCoroutine(ability.GetComponent<AbilityBehaviour>().SpawnAbility(currentPosition, hitPoint));
             timeLastSpawn = Time.time;
         }
 

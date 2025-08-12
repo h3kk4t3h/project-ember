@@ -6,10 +6,12 @@ public abstract class AbilityBehaviour : MonoBehaviour
 {
     //General Ability Variables
     public Dictionary<Collider, int> targetsHit = new Dictionary<Collider, int>();
+    public CharacterStats userStats;
 
     //General Ability Functions
     public abstract IEnumerator SpawnAbility(Vector3 currentPosition, Vector3 hitPoint);
     public abstract AbilitySO GetAbilitySO();
+    public abstract float CalculateAbilityDamage();
     public abstract void ApplyAbilityDamage(GameObject target);
 
 }

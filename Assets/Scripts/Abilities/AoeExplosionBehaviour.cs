@@ -64,6 +64,12 @@ public class AoeExplosionBehaviour : AbilityBehaviour
         return AOEData;
     }
 
+    public override float CalculateAbilityDamage()
+    {
+        float abilityDamage = AOEData.baseDamage;
+        return abilityDamage;
+    }
+
     public override void ApplyAbilityDamage(GameObject target)
     {
         target.GetComponent<CharacterStats>().TakeDamage(AOEData.baseDamage);

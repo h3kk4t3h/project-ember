@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Toggle mageToggle;
     [SerializeField] private Button startButton;
     [SerializeField] private Button exitButton;
+
+    public static event Action OnNewGameStarted; // For AudioManager
 
     void Start()
     {
@@ -39,7 +42,11 @@ public class MainMenu : MonoBehaviour
             return;
 
         startButton.onClick.RemoveAllListeners();
-        startButton.onClick.AddListener(() => SceneManager.LoadScene(1));
+        startButton.onClick.AddListener(() =>
+        {
+            OnNewGameStarted?.Invoke(); // For AudioManager
+            SceneManager.LoadScene(1);
+        });
     }
 
     private void SetupExitButton()

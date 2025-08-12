@@ -62,12 +62,18 @@ public class MeleeBehaviour : AbilityBehaviour
 
         }
 
-        return null;
+        yield return new WaitForSeconds(0);
     }
 
     public override AbilitySO GetAbilitySO()
     {
         return meleeData;
+    }
+
+    public override float CalculateAbilityDamage()
+    {
+        float abilityDamage = meleeData.baseDamage;
+        return abilityDamage;
     }
 
     public override void ApplyAbilityDamage(GameObject target)
