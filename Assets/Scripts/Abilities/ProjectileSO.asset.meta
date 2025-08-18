@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 fileFormatVersion: 2
 guid: 0a89b6a72b2aa374e9109d7a78ff1178
 NativeFormatImporter:
@@ -6,3 +7,14 @@ NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+||||||| 49382df
+=======
+fileFormatVersion: 2
+guid: 0a89b6a72b2aa374e9109d7a78ff1178
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+>>>>>>> origin/tech-demo

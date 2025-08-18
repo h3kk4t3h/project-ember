@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using System;
 using UnityEngine;
 
@@ -148,3 +149,156 @@ public class AudioManager : MonoBehaviour
       PlaySfx(clips[idx], volume);
    }
 }
+||||||| 49382df
+=======
+using System;
+using UnityEngine;
+
+// como dar setup no unity:
+// criar um GameObject vazio chamado "AudioManager"
+// adicionar este script ao GameObject
+// adicionar os AudioSources e AudioClips no inspector
+
+public class AudioManager : MonoBehaviour
+{
+   [Header("Audio Sources")]
+   [SerializeField] private AudioSource musicSource;
+   [SerializeField] private AudioSource sfxSource;
+
+   [Header("Background Music")]
+   [SerializeField] private AudioClip backgroundMusic;
+
+   [Header("SFX Clips")]
+   [SerializeField] private AudioClip deathSfx;
+   [SerializeField] private AudioClip levelUpSfx;
+
+   public static AudioManager Instance { get; private set; }
+
+   private void Awake()
+   {
+      if (Instance != null && Instance != this)
+      {
+         Destroy(gameObject);
+         return;
+      }
+      Instance = this;
+      DontDestroyOnLoad(gameObject);
+      if (musicSource == null)
+         musicSource = gameObject.AddComponent<AudioSource>();
+      if (sfxSource == null)
+         sfxSource = gameObject.AddComponent<AudioSource>();
+   }
+
+   private void Start()
+   {
+      if (backgroundMusic != null && (musicSource == null || musicSource.clip != backgroundMusic))
+      {
+         PlayMusic(backgroundMusic, true);
+      }
+   }
+
+   public void PlayMusic(AudioClip clip, bool loop = true)
+   {
+      if (clip == null || musicSource == null) return;
+      musicSource.clip = clip;
+      musicSource.loop = loop;
+      musicSource.Play();
+   }
+
+   public void PlaySfx(AudioClip clip, float volume = 1f)
+   {
+      if (clip == null || sfxSource == null) return;
+      sfxSource.PlayOneShot(clip, Mathf.Clamp01(volume));
+   }
+
+   public void PlayDeathSfx(float volume = 1f)
+   {
+      if (deathSfx != null && sfxSource != null)
+      {
+         PlaySfx(deathSfx, volume);
+      }
+   }
+
+   public void PlayLevelUpSfx(float volume = 1f)
+   {
+      if (levelUpSfx != null && sfxSource != null)
+      {
+         PlaySfx(levelUpSfx, volume);
+      }
+   }
+
+   public void PauseMusic()
+   {
+      if (musicSource != null && musicSource.isPlaying)
+         musicSource.Pause();
+   }
+
+   public void ResumeMusic()
+   {
+      if (musicSource != null && !musicSource.isPlaying && musicSource.clip != null)
+         musicSource.UnPause();
+   }
+
+   public void StopMusic()
+   {
+      if (musicSource != null)
+         musicSource.Stop();
+   }
+
+   public void StopSfx()
+   {
+      if (sfxSource != null)
+         sfxSource.Stop();
+   }
+
+   public void SetMusicVolume(float volume)
+   {
+      if (musicSource != null)
+         musicSource.volume = Mathf.Clamp01(volume);
+   }
+
+   public void SetSfxVolume(float volume)
+   {
+      if (sfxSource != null)
+         sfxSource.volume = Mathf.Clamp01(volume);
+   }
+
+   public void MuteMusic(bool mute)
+   {
+      if (musicSource != null)
+         musicSource.mute = mute;
+   }
+
+   public void MuteSfx(bool mute)
+   {
+      if (sfxSource != null)
+         sfxSource.mute = mute;
+   }
+
+   public void FadeMusic(float targetVolume, float duration)
+   {
+      if (musicSource != null)
+         StartCoroutine(FadeAudioSource(musicSource, targetVolume, duration));
+   }
+
+   private System.Collections.IEnumerator FadeAudioSource(AudioSource source, float targetVolume, float duration)
+   {
+      float startVolume = source.volume;
+      float time = 0f;
+      while (time < duration)
+      {
+         time += Time.deltaTime;
+         source.volume = Mathf.Lerp(startVolume, Mathf.Clamp01(targetVolume), time / duration);
+         yield return null;
+      }
+      source.volume = Mathf.Clamp01(targetVolume);
+   }
+
+   public void PlayRandomSfx(AudioClip[] clips, float volume = 1f)
+   {
+      if (clips == null || clips.Length == 0) return;
+      int idx = UnityEngine.Random.Range(0, clips.Length);
+      PlaySfx(clips[idx], volume);
+   }
+}
+>>>>>>> origin/tech-demo
