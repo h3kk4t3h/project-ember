@@ -38,36 +38,36 @@
 
 ## Stats & Attributes
 
-- Base Stats:
-Health
-Mana
-Mana regen / s ???
-Level
-Current XP (Talvez criamos uma tabela in game para sabermos o xp por nivel)
-Gold
+-- Base Stats:
+- Health
+- Mana
+- Mana regen/s
+- Level
+- Current XP (Talvez criamos uma tabela in game para sabermos o xp por nivel)
+- Gold
 
-- Attributes:
-Strength -> Crit chance & Ailment Chance
-Intelligence -> Mana & Cooldown reduction
-Dexterity -> Attack/Cast Speed & Move Speed
-Vitality -> HP & Armor Threshold
+-- Attributes:
+- Strength -> Crit chance & Ailment Chance
+- Intelligence -> Mana & Cooldown reduction
+- Dexterity -> Attack/Cast Speed & Move Speed
+- Vitality -> HP & Armor Threshold
 
-- Damage Types: (Ailment)
-Fire,       //Burn 
-Water,      //Chill
-Air,        //Shock
-Earth,      //Stun
-Arcane      //Void
+-- Damage Types: (Ailment)
+- Fire (Burn)
+- Water (Chill)
+- Air (Shock)
+- Earth (Stun)
+- Arcane (Void)
 
-- Damage stats:
-Critical Chance (percentage)
-Critical Multiplier (percentage)
-Damage Multiplier (per damage type) (percentage)
-Damage Flat (per damage type)
-Ailment Chance (percentage)
-Ailment Multiplier (percentage)
-Attack/Cast Speed (percentage)
-Cooldown reduction (percentage)
+-- Damage stats:
+- Critical Chance (percentage)
+- Critical Multiplier (percentage)
+- Damage Multiplier (per damage type) (percentage)
+- Damage Flat (per damage type)
+- Ailment Chance (percentage)
+- Ailment Multiplier (percentage)
+- Attack/Cast Speed (percentage)
+- Cooldown reduction (percentage)
 
 - Armor stats:
 Armor
