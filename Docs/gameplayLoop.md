@@ -69,9 +69,9 @@
 - Attack/Cast Speed (percentage)
 - Cooldown reduction (percentage)
 
-- Armor stats:
-Armor
-Armor Threshold
-Armor Regen (quantidade que se recupera depois do tempo de espera)
-Move Speed 
+-- Armor stats:
+- Armor
+- Armor Threshold
+- Armor Regen (quantidade que se recupera depois do tempo de espera)
+- Move Speed 
 
