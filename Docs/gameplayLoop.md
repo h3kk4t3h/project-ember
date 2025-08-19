@@ -70,7 +70,7 @@
 - Cooldown reduction (percentage)
 - Ability Duration
 
-Specific Ability Stats
+-- Specific Ability Stats
 
 - (Projectile Abilities) Number of Projectiles
 - (Projectile Abilities) Penetration (number of targets that it can penetrate)
