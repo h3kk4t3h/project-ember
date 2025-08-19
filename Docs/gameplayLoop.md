@@ -68,6 +68,13 @@
 - Ailment Multiplier (percentage)
 - Attack/Cast Speed (percentage)
 - Cooldown reduction (percentage)
+- Ability Duration
+
+Specific Ability Stats
+
+- (Projectile Abilities) Number of Projectiles
+- (Projectile Abilities) Penetration (number of targets that it can penetrate)
+- (AOE Abilities) Aoe increase (percentage)
 
 -- Armor stats:
 - Armor
